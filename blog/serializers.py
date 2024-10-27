@@ -32,5 +32,4 @@ class BlogSerializer(serializers.ModelSerializer):
             # For new instance creation
             if Blog.objects.filter(slug=slug).exists():
                 raise serializers.ValidationError(f"A blog with the slug '{slug}' already exists. Please use a different title.")
-
         return value
