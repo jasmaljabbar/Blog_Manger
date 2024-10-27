@@ -5,12 +5,13 @@ from .models import Blog
 class BlogSerializer(serializers.ModelSerializer):
     author_name = serializers.ReadOnlyField(source='author.username')
     is_author = serializers.SerializerMethodField()
+    image = serializers.CharField(required=False, allow_blank=True)
 
     class Meta:
         model = Blog
         fields = ['id', 'title', 'content', 'image', 'author', 
-                 'author_name', 'created_at', 'updated_at', 
-                 'slug', 'is_author']
+                  'author_name', 'created_at', 'updated_at', 
+                  'slug', 'is_author']
         read_only_fields = ['author', 'slug']
 
     def get_is_author(self, obj):
@@ -20,20 +21,16 @@ class BlogSerializer(serializers.ModelSerializer):
         return False
     
     def validate_title(self, value):
-        """
-        Custom validation to check for the uniqueness of the slug generated from the title.
-        """
         slug = slugify(value)  # Create slug from the title
-        if Blog.objects.filter(slug=slug).exists():
-            raise serializers.ValidationError("A blog with this title already exists. Please use a different title.")
-        return value
+        
+        # Check for existing slugs, considering the instance
+        if self.instance:
+            # Exclude current instance if it exists (for updates)
+            if Blog.objects.filter(slug=slug).exclude(id=self.instance.id).exists():
+                raise serializers.ValidationError(f"A blog with the slug '{slug}' already exists. Please use a different title.")
+        else:
+            # For new instance creation
+            if Blog.objects.filter(slug=slug).exists():
+                raise serializers.ValidationError(f"A blog with the slug '{slug}' already exists. Please use a different title.")
 
-    def validate_image(self, value):
-        if value:
-            # Max file size of 5MB
-            if value.size > 5 * 1024 * 1024:
-                raise serializers.ValidationError("Image size cannot exceed 5MB")
-            # Validate file type
-            if not value.content_type.startswith('image/'):
-                raise serializers.ValidationError("Only image files are allowed")
         return value
