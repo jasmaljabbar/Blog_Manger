@@ -12,16 +12,24 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 import os
 from pathlib import Path
 from datetime import timedelta
+import environ
+
+env = environ.Env(
+    # set casting, default value
+    DEBUG=(bool, False)
+)
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-6tagzhuo)u*8&9qts3euruz(s$4#ra+0!@ldd5&fedt)%y^1xi'
+SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -85,12 +93,12 @@ CORS_ALLOW_ALL_ORIGINS = True
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',  # Change to 'mysql' if using MySQL
-        'NAME': 'defaultdb',
-        'USER': 'avnadmin',
-        'PASSWORD': 'AVNS_rtlRZ_EUMXFSDz8PF3q',
-        'HOST': 'blogmanager-jcue790-5416.b.aivencloud.com',
-        'PORT': '16750',  # Usually 5432 for PostgreSQL or 3306 for MySQL
+        'ENGINE': 'django.db.backends.postgresql',  
+        'NAME': env('defaultdb'),
+        'USER': env('USER'),
+        'PASSWORD': env('PASSWORD'),
+        'HOST': env('HOST'),
+        'PORT': env('PORT'),  # Usually 5432 for PostgreSQL or 3306 for MySQL
     }
 }
 
