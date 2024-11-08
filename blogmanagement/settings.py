@@ -32,9 +32,14 @@ environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ["127.0.0.1", "blogmanger-production.up.railway.app"]
+
+# CSRF Trusted Origins
+CSRF_TRUSTED_ORIGINS = [
+    'https://blogmanger-production.up.railway.app',  # Add production domain to trusted origins
+]
 
 
 # Application definition
@@ -87,6 +92,10 @@ TEMPLATES = [
 WSGI_APPLICATION = 'blogmanagement.wsgi.application'
 
 CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:5173",  # Local development URL
+    "https://blogmanger-production.up.railway.app",  # Add production domain here
+]
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
