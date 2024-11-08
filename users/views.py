@@ -6,9 +6,8 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from rest_framework import status
-
-
-
+from rest_framework_simplejwt.tokens import AccessToken
+from rest_framework_simplejwt.exceptions import InvalidToken, TokenError
 from . import serializers
 from .models import Profile
 # Create your views here.
@@ -16,6 +15,18 @@ from .models import Profile
 
 User = get_user_model()
 
+
+@api_view(['POST'])
+def validate_token(request):
+    token = request.data.get('token')
+    if not token:
+        return Response({'detail': 'Token not provided'}, status=400)
+    
+    try:
+        AccessToken(token)  
+        return Response({'detail': 'Token is valid'}, status=200)
+    except (TokenError, InvalidToken):
+        return Response({'detail': 'Token is invalid or expired'}, status=401)
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated]) 

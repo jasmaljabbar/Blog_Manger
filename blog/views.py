@@ -34,9 +34,7 @@ class BlogViewSet(viewsets.ModelViewSet):
 
 
 
-    from rest_framework import status
-    from rest_framework.response import Response
-    from rest_framework.exceptions import ValidationError
+   
 
     def update(self, request, *args, **kwargs):
         partial = kwargs.pop('partial', False)
