@@ -1,0 +1,9 @@
+{
+    "builds": [
+      { "src": "blogmanagement/wsgi.py", "use": "@vercel/python" }
+    ],
+    "routes": [
+      { "src": "/(.*)", "dest": "blogmanagement/wsgi.py"}
+    ]
+  }
+  
