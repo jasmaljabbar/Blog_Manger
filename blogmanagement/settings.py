@@ -85,8 +85,12 @@ CORS_ALLOW_ALL_ORIGINS = True
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',  # Change to 'mysql' if using MySQL
+        'NAME': 'defaultdb',
+        'USER': 'avnadmin',
+        'PASSWORD': 'AVNS_rtlRZ_EUMXFSDz8PF3q',
+        'HOST': 'blogmanager-jcue790-5416.b.aivencloud.com',
+        'PORT': '16750',  # Usually 5432 for PostgreSQL or 3306 for MySQL
     }
 }
 
